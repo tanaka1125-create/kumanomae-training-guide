@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="エニタイムフィットネス熊野前店の設備で行う、未経験者向け4週間筋力向上・減量トレーニングプラン。"
+    />
+    <meta name="theme-color" content="#081b21" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="KUMANOMAE TRAINING" />
+    <meta property="og:description" content="熊野前店の設備で行う4週間筋力向上・減量プラン" />
+    <meta property="og:image" content="./og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>KUMANOMAE TRAINING | 4週間トレーニングプラン</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">本文へ移動</a>
+
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="#top" aria-label="ページ上部へ">
+          <span class="brand-mark" aria-hidden="true">KT</span>
+          <span>
+            <strong>KUMANOMAE</strong>
+            <small>TRAINING GUIDE</small>
+          </span>
+        </a>
+        <nav class="header-nav" aria-label="メインナビゲーション">
+          <a href="#weekly">週間メニュー</a>
+          <a href="#progression">4週間の進め方</a>
+          <a href="#logbook">記録</a>
+          <a href="#safety">腰の注意</a>
+        </nav>
+        <button class="print-button" id="printButton" type="button">印刷</button>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero" id="top">
+        <div class="hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">PERSONAL TRAINING PLAN / MONTH 01</p>
+            <h1>強くなる。<br /><span>軽くなる。</span></h1>
+            <p class="hero-lead">
+              熊野前店のマシンで迷わず進める、未経験者向けの4週間プラン。
+              平日5日を「全身筋トレ3日＋有酸素・回復2日」に分けます。
+            </p>
+            <div class="hero-actions">
+              <a class="primary-action" href="#weekly">今日のメニューを見る</a>
+              <a class="secondary-action" href="#logbook">記録をつける</a>
+            </div>
+          </div>
+
+          <aside class="profile-card" aria-label="利用者プロフィール">
+            <div class="profile-card__head">
+              <span>YOUR BASELINE</span>
+              <strong>01</strong>
+            </div>
+            <dl class="profile-stats">
+              <div><dt>AGE</dt><dd>25<span>歳</span></dd></div>
+              <div><dt>HEIGHT</dt><dd>175<span>cm</span></dd></div>
+              <div><dt>WEIGHT</dt><dd>80<span>kg</span></dd></div>
+              <div><dt>WEEKLY</dt><dd>5<span>日</span></dd></div>
+            </dl>
+            <p>目的：筋力向上・減量</p>
+            <p>経験：未経験／軽度の腰痛あり</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="principles" aria-label="プランの原則">
+        <article>
+          <span>01</span>
+          <div><strong>FORM FIRST</strong><p>初月は重量よりフォーム。限界まで追い込まない。</p></div>
+        </article>
+        <article>
+          <span>02</span>
+          <div><strong>RPE 6–7</strong><p>毎セット、あと3～4回できる余裕を残す。</p></div>
+        </article>
+        <article>
+          <span>03</span>
+          <div><strong>3 + 2 SPLIT</strong><p>筋トレ3日、有酸素・回復2日で続ける。</p></div>
+        </article>
+      </section>
+
+      <section class="section" id="weekly">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">WEEKLY ROUTINE</p>
+            <h2>今週のトレーニング</h2>
+          </div>
+          <p>曜日を選ぶと、熊野前店の設備に合わせたメニューを表示します。</p>
+        </div>
+
+        <div class="week-selector" role="group" aria-label="トレーニング週">
+          <button type="button" data-week="1">Week 1</button>
+          <button type="button" data-week="2">Week 2</button>
+          <button type="button" data-week="3">Week 3</button>
+          <button type="button" data-week="4">Week 4</button>
+        </div>
+
+        <div class="week-note" id="weekNote" aria-live="polite"></div>
+
+        <div class="day-tabs" role="tablist" aria-label="曜日">
+          <button type="button" role="tab" data-day="mon"><span>MON</span>月曜</button>
+          <button type="button" role="tab" data-day="tue"><span>TUE</span>火曜</button>
+          <button type="button" role="tab" data-day="wed"><span>WED</span>水曜</button>
+          <button type="button" role="tab" data-day="thu"><span>THU</span>木曜</button>
+          <button type="button" role="tab" data-day="fri"><span>FRI</span>金曜</button>
+        </div>
+
+        <article class="workout-panel" aria-live="polite">
+          <div class="workout-panel__header">
+            <div>
+              <p class="eyebrow" id="dayCode">MONDAY / FULL BODY A</p>
+              <h3 id="dayTitle">全身A：マシン中心</h3>
+              <p id="dayDescription"></p>
+            </div>
+            <div class="session-meta">
+              <span id="sessionTime">45–60 MIN</span>
+              <span id="sessionFocus">FULL BODY</span>
+            </div>
+          </div>
+          <div class="warmup" id="warmupBox"></div>
+          <div class="exercise-list" id="exerciseList"></div>
+          <div class="completion-panel">
+            <div>
+              <strong id="completionText">0 / 0 完了</strong>
+              <span>この端末に自動保存されます</span>
+            </div>
+            <div class="progress-track" aria-hidden="true">
+              <span id="completionBar"></span>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="section progression-section" id="progression">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">FOUR-WEEK PROGRESSION</p>
+            <h2>4週間の進め方</h2>
+          </div>
+          <p>上げる週と軽くする週を分け、腰の状態を確認しながら繰り返します。</p>
+        </div>
+        <div class="progression-grid">
+          <article>
+            <span>01</span><p>LEARN</p><h3>フォーム習得</h3>
+            <strong>2 SETS / RPE 6</strong>
+            <ul><li>8回中心</li><li>速歩き25分</li><li>腰の反応を記録</li></ul>
+          </article>
+          <article>
+            <span>02</span><p>BUILD</p><h3>回数を増やす</h3>
+            <strong>2 SETS / RPE 6–7</strong>
+            <ul><li>9～10回を目指す</li><li>速歩き30分</li><li>重量は据え置き</li></ul>
+          </article>
+          <article>
+            <span>03</span><p>PROGRESS</p><h3>少しだけ強く</h3>
+            <strong>3 SETS / RPE 7</strong>
+            <ul><li>条件達成時のみ増量</li><li>速歩き＋速め1分</li><li>フォームを維持</li></ul>
+          </article>
+          <article>
+            <span>04</span><p>RESET</p><h3>疲労を抜く</h3>
+            <strong>2 SETS / RPE 5–6</strong>
+            <ul><li>重量を約10%減</li><li>楽な歩行20～25分</li><li>翌月の準備</li></ul>
+          </article>
+        </div>
+        <div class="increase-rule">
+          <div class="increase-rule__label">重量を増やす条件</div>
+          <ol>
+            <li>全セット10回、RPE 7以下</li>
+            <li>反動なし・可動域を維持</li>
+            <li>運動中～翌日に腰痛の悪化なし</li>
+          </ol>
+          <p>達成時のみ、上半身1～2.5kg／下半身2.5～5kg、またはマシンの最小単位を追加。</p>
+        </div>
+      </section>
+
+      <section class="section logbook-section" id="logbook">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">LOCAL LOGBOOK</p>
+            <h2>今月の記録</h2>
+          </div>
+          <p>体重と腰の状態を週ごとに記録。データはこの端末のブラウザ内だけに保存されます。</p>
+        </div>
+        <div class="logbook-grid">
+          <div class="metric-input">
+            <label for="bodyWeight">週平均体重</label>
+            <div><input id="bodyWeight" type="number" min="30" max="250" step="0.1" inputmode="decimal" /><span>kg</span></div>
+          </div>
+          <div class="metric-input">
+            <label for="painLevel">腰の痛み <output id="painOutput">0</output> / 10</label>
+            <input id="painLevel" type="range" min="0" max="10" step="1" value="0" />
+          </div>
+          <div class="metric-input metric-input--wide">
+            <label for="weeklyNote">今週のメモ</label>
+            <textarea id="weeklyNote" rows="3" placeholder="フォーム、疲労、次週の調整など"></textarea>
+          </div>
+        </div>
+        <div class="logbook-actions">
+          <button class="primary-action" id="exportButton" type="button">記録を書き出す</button>
+          <button class="danger-button" id="resetButton" type="button">この端末の記録を消去</button>
+        </div>
+      </section>
+
+      <section class="section safety-section" id="safety">
+        <div class="section-heading section-heading--light">
+          <div>
+            <p class="eyebrow">LOW-BACK SAFETY</p>
+            <h2>腰を守る4つのルール</h2>
+          </div>
+          <p>「運動不足が原因」と決めつけず、悪化する動きは中止します。</p>
+        </div>
+        <div class="safety-grid">
+          <article><span>1</span><h3>腹部を軽く固める</h3><p>腰を過度に反らしたり、丸めたりしない。</p></article>
+          <article><span>2</span><h3>お尻を後ろへ引く</h3><p>ヒップヒンジは腰ではなく股関節から動く。</p></article>
+          <article><span>3</span><h3>痛みを追い込まない</h3><p>脚へ走る痛み、しびれ、脱力が出たら中止。</p></article>
+          <article><span>4</span><h3>翌日まで確認する</h3><p>明らかに悪化した種目は軽量化または変更。</p></article>
+        </div>
+        <div class="medical-alert">
+          <strong>すぐに医療機関へ相談するサイン</strong>
+          <p>排尿・排便の異常、股周辺のしびれ、進行する脚の脱力、発熱や外傷を伴う強い腰痛。</p>
+        </div>
+      </section>
+
+      <section class="section equipment-section">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">EQUIPMENT MAP</p>
+            <h2>熊野前店で使う設備</h2>
+          </div>
+          <p>公式掲載設備の中から、このプランで使うものを抜粋しています。</p>
+        </div>
+        <div class="equipment-tags">
+          <span>レッグプレス</span><span>リニアレッグプレス</span><span>ラットプル</span>
+          <span>シーテッドロー</span><span>アシストチンニング</span><span>ショルダープレス</span>
+          <span>チェストプレス</span><span>インクラインプレス</span><span>グルートドライブ</span>
+          <span>スミスマシン</span><span>ダンベル 1–40kg</span><span>ケーブルマシン</span>
+          <span>ヨガマット</span><span>フォームローラー</span><span>トレッドミル</span>
+        </div>
+      </section>
+    </main>
+
+    <aside class="rest-timer" id="restTimer" aria-live="polite" hidden>
+      <div>
+        <span>REST TIMER</span>
+        <strong id="timerDisplay">02:00</strong>
+      </div>
+      <button id="cancelTimer" type="button">終了</button>
+    </aside>
+
+    <footer class="site-footer">
+      <div>
+        <strong>KUMANOMAE TRAINING</strong>
+        <p>4週間筋力向上・減量メニュー</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://www.anytimefitness.co.jp/kumanomae/facility/" target="_blank" rel="noreferrer">熊野前店設備</a>
+        <a href="https://www.youtube.com/shorts/83yvrc7u16Q" target="_blank" rel="noreferrer">参考動画</a>
+        <a href="https://acsm.org/resistance-training-guidelines-update-2026/" target="_blank" rel="noreferrer">ACSM</a>
+        <a href="https://www.who.int/news/item/07-12-2023-who-releases-guidelines-on-chronic-low-back-pain" target="_blank" rel="noreferrer">WHO</a>
+      </div>
+      <p class="disclaimer">本サイトは一般的な運動計画であり、診断や治療の代替ではありません。</p>
+    </footer>
+
+    <noscript>このサイトの記録機能を利用するにはJavaScriptを有効にしてください。</noscript>
+    <script src="./app.js" defer></script>
+  </body>
+</html>
