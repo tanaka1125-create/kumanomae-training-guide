@@ -7,35 +7,96 @@ const weeks = {
   4: { label: "疲労を抜く", note: "全種目2セット、重量を約10%軽くしてRPE 5～6。有酸素も楽に。", sets: 2 },
 };
 
-const youtubeSearchTerms = {
-  "リニアレッグプレス": "リニアレッグプレス 正しい使い方 フォーム 初心者",
-  "チェストプレス": "チェストプレス 正しい使い方 フォーム 初心者",
-  "ラットプル": "ラットプルダウン 正しい使い方 フォーム 初心者",
-  "グルートドライブ": "グルートドライブ マシン 正しい使い方 フォーム",
-  "ショルダープレス": "ショルダープレス マシン 正しい使い方 初心者",
-  "ケーブル・パロフプレス": "パロフプレス ケーブル 正しいフォーム 初心者",
-  "トレッドミル速歩き": "トレッドミル ウォーキング 正しい姿勢 使い方 初心者",
-  "バードドッグ": "バードドッグ 正しいフォーム 腰 初心者",
-  "膝付きサイドプランク": "膝つき サイドプランク 正しいフォーム 初心者",
-  "フォームローラー／軽いストレッチ": "フォームローラー 全身 初心者 正しい使い方",
-  "スミス・ボックススクワット": "スミスマシン ボックススクワット 正しいフォーム 初心者",
-  "ケーブル・プルスルー": "ケーブル プルスルー 正しいフォーム 初心者",
-  "インクラインプレス": "インクライン チェストプレス マシン 正しいフォーム",
-  "アシストチンニング": "アシストチンニング マシン 正しい使い方 初心者",
-  "シーテッドロー": "シーテッドロー マシン 正しい使い方 フォーム 初心者",
-  "デッドバグ": "デッドバグ 正しいフォーム 腰 初心者",
-  "グルートブリッジ": "グルートブリッジ 正しいフォーム 初心者",
-  "フォームローラー／ストレッチ": "フォームローラー ストレッチ 全身 初心者",
-  "レッグプレス": "レッグプレス マシン 正しい使い方 フォーム 初心者",
-  "ダンベルベンチプレス": "ダンベルベンチプレス 正しいフォーム 初心者",
-  "リアデルトフライ": "リアデルトフライ マシン 正しい使い方 フォーム",
-  "サイドプランク": "サイドプランク 正しいフォーム 初心者",
+const exerciseVideos = {
+  "リニアレッグプレス": {
+    title: "PLATE-LOADED リニアレッグプレス（トレーニング動画）",
+    url: "https://www.youtube.com/watch?v=iZ_LnomN2Hk",
+  },
+  "チェストプレス": {
+    title: "【ジム初心者】チェストプレスの使い方をプロが分かりやすく解説！",
+    url: "https://www.youtube.com/watch?v=NMLFTGXgXvo",
+  },
+  "ラットプル": {
+    title: "【初心者向け】ラットプルダウンのやり方｜効果的なフォームの解説",
+    url: "https://www.youtube.com/watch?v=mG1T29lwrNI",
+  },
+  "グルートドライブ": {
+    title: "PLATE-LOADED グルートドライブ（トレーニング動画）",
+    url: "https://www.youtube.com/watch?v=EtmwiMlaN8M",
+  },
+  "ショルダープレス": {
+    title: "【ジム初心者】ショルダープレスマシンの正しい使い方",
+    url: "https://www.youtube.com/watch?v=Leds7XNv6GM",
+  },
+  "ケーブル・パロフプレス": {
+    title: "パロフプレス",
+    url: "https://www.youtube.com/watch?v=CTkOl2R5-7E",
+  },
+  "トレッドミル速歩き": {
+    title: "【ジムトレ】トレッドミル（ランニングマシン）基本の使い方・ポイント",
+    url: "https://www.youtube.com/watch?v=EKV_Y2BmEPg",
+  },
+  "バードドッグ": {
+    title: "【体幹強化】「バードドッグ」のやり方",
+    url: "https://www.youtube.com/watch?v=FvU7izWY358",
+  },
+  "膝付きサイドプランク": {
+    title: "低負担で続けられる横向きプランク！初心者向け体幹トレーニング",
+    url: "https://www.youtube.com/watch?v=iATDug-a97E",
+  },
+  "フォームローラー／軽いストレッチ": {
+    title: "フォームローラーの使い方｜初心者の方にオススメ【20分間】",
+    url: "https://www.youtube.com/watch?v=N5mXP4J5sbw",
+  },
+  "スミス・ボックススクワット": {
+    title: "スミスマシンを使ったスクワットの正しい方法",
+    url: "https://www.youtube.com/watch?v=kKj1DoUQXXg",
+  },
+  "ケーブル・プルスルー": {
+    title: "ケーブルプルスルーのやり方とフォーム",
+    url: "https://www.youtube.com/watch?v=G1Hg94BaQM8",
+  },
+  "インクラインプレス": {
+    title: "鈴木雅が「インクラインマシンプレス」を伝授",
+    url: "https://www.youtube.com/watch?v=9eQH4Sx2lU0",
+  },
+  "アシストチンニング": {
+    title: "アシストチンニング基礎編｜使い方・背中を鍛える",
+    url: "https://www.youtube.com/watch?v=IR0vj8nMjeo",
+  },
+  "シーテッドロー": {
+    title: "筋トレ初心者が最初に覚えるべき背中トレのマシン使い方解説",
+    url: "https://www.youtube.com/watch?v=gxHTVrn6Xi4",
+  },
+  "デッドバグ": {
+    title: "腰にやさしい体幹トレーニング「デッドバグ」の正しいやり方",
+    url: "https://www.youtube.com/watch?v=Wb7_mqepkfw",
+  },
+  "グルートブリッジ": {
+    title: "グルート・ブリッジの正しいやり方",
+    url: "https://www.youtube.com/watch?v=SY7oQy3wcuo",
+  },
+  "フォームローラー／ストレッチ": {
+    title: "フォームローラーの使い方｜初心者の方にオススメ【20分間】",
+    url: "https://www.youtube.com/watch?v=N5mXP4J5sbw",
+  },
+  "レッグプレス": {
+    title: "【ジム初心者】レッグプレスマシンの使い方",
+    url: "https://www.youtube.com/watch?v=7_qPg97ys4g",
+  },
+  "ダンベルベンチプレス": {
+    title: "ダンベルベンチプレス：5つのエラー動作と改善方法",
+    url: "https://www.youtube.com/watch?v=pJgZociaUes",
+  },
+  "リアデルトフライ": {
+    title: "【マシン】リアデルト【使い方】",
+    url: "https://www.youtube.com/watch?v=FoBCkf5xc0s",
+  },
+  "サイドプランク": {
+    title: "脇腹を引き締める「サイドプランク」の正しいやり方",
+    url: "https://www.youtube.com/watch?v=AKUGmosS7fM",
+  },
 };
-
-function youtubeSearchUrl(exerciseName) {
-  const query = youtubeSearchTerms[exerciseName] || `${exerciseName} 正しいフォーム 初心者`;
-  return `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
-}
 
 const days = {
   mon: {
@@ -119,7 +180,7 @@ const days = {
 };
 
 const normalizeExercise = ([id, name, type, reps, rpe, rest, machine, fixedSets]) =>
-  ({ id, name, type, reps, rpe, rest, machine, fixedSets, videoUrl: youtubeSearchUrl(name) });
+  ({ id, name, type, reps, rpe, rest, machine, fixedSets, video: exerciseVideos[name] });
 Object.values(days).forEach((day) => { day.exercises = day.exercises.map(normalizeExercise); });
 
 const defaultState = { week: 1, day: "mon", workouts: {}, weekly: {} };
@@ -229,7 +290,8 @@ function renderDay() {
         <label>実績回数<input type="text" value="${record.reps ?? ""}" placeholder="例 10,10" /></label>
         <div class="exercise-actions">
           ${exercise.rest ? `<button class="rest-button" type="button">休憩タイマー ${exercise.rest}秒</button>` : ""}
-          <a class="video-link" href="${exercise.videoUrl}" target="_blank" rel="noopener noreferrer" aria-label="${exercise.name}の参考動画をYouTubeで見る">
+          <a class="video-link" href="${exercise.video.url}" target="_blank" rel="noopener noreferrer"
+            title="${exercise.video.title}" aria-label="${exercise.name}のおすすめ動画「${exercise.video.title}」をYouTubeで見る">
             <span aria-hidden="true">▶</span> YouTubeで参考動画
           </a>
         </div>
