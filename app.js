@@ -261,7 +261,6 @@ function renderDay() {
     button.setAttribute("aria-selected", String(selected));
     button.tabIndex = selected ? 0 : -1;
   });
-  document.querySelector("#workout-panel").setAttribute("aria-labelledby", `day-tab-${state.day}`);
   elements.dayCode.textContent = day.code;
   elements.dayTitle.textContent = day.title;
   elements.dayDescription.textContent = day.description;
@@ -273,44 +272,35 @@ function renderDay() {
   day.exercises.forEach((exercise, index) => {
     const record = getRecord(exercise.id);
     const card = document.createElement("div");
-    card.className = `exercise-card${record.done ? " is-complete" : ""}`;
-    card.dataset.exerciseId = exercise.id;
+    card.className = "exercise-card";
     card.innerHTML = `
-      <div class="exercise-card__head">
-        <label class="exercise-check" title="${exercise.name}を完了にする">
-          <span class="sr-only">${exercise.name}を完了にする</span>
-          <input type="checkbox" ${record.done ? "checked" : ""} aria-label="${exercise.name}を完了" />
-        </label>
-        <span class="exercise-index" aria-hidden="true">${String(index + 1).padStart(2, "0")}</span>
-        <div class="exercise-name">
-          <span>${exercise.machine} ／ ${exercise.type}</span>
-          <strong>${exercise.name}</strong>
-        </div>
+      <label class="exercise-check" title="完了">
+        <span class="sr-only">完了</span>
+        <input type="checkbox" ${record.done ? "checked" : ""} aria-label="${exercise.name}を完了" />
+      </label>
+      <div class="exercise-name">
+        <span>${String(index + 1).padStart(2, "0")} / ${exercise.machine}</span>
+        <strong>${exercise.name}</strong>
       </div>
-      <div class="exercise-metrics">
-        <div><span>セット × 回数</span><strong>${effectiveSets(exercise)} × ${exercise.reps}</strong></div>
-        <div><span>強度</span><strong>RPE ${exercise.rpe}</strong></div>
-        <div><span>休憩</span><strong>${exercise.rest ? `${exercise.rest}秒` : "なし"}</strong></div>
-      </div>
+      <div class="exercise-stat"><span>SETS × REPS</span><strong>${effectiveSets(exercise)} × ${exercise.reps}</strong></div>
+      <div class="exercise-stat"><span>INTENSITY</span><strong>RPE ${exercise.rpe}</strong></div>
+      <div class="exercise-stat"><span>REST</span><strong>${exercise.rest ? `${exercise.rest}秒` : "—"}</strong></div>
       <div class="exercise-inputs">
-        <label>使用重量<input type="number" min="0" step="0.5" inputmode="decimal" value="${record.weight ?? ""}" placeholder="kg" /></label>
-        <label>実績回数<input type="text" value="${record.reps ?? ""}" placeholder="例：10, 10" /></label>
-      </div>
-      <div class="exercise-actions">
-        ${exercise.rest ? `<button class="rest-button" type="button"><span aria-hidden="true">◷</span> 休憩 ${exercise.rest}秒</button>` : ""}
-        <a class="video-link" href="${exercise.video.url}" target="_blank" rel="noopener noreferrer"
-          title="${exercise.video.title}" aria-label="${exercise.name}のおすすめ動画「${exercise.video.title}」をYouTubeで見る">
-          <span aria-hidden="true">▶</span> フォーム動画を見る
-        </a>
+        <label>重量<input type="number" min="0" step="0.5" inputmode="decimal" value="${record.weight ?? ""}" placeholder="kg" /></label>
+        <label>実績回数<input type="text" value="${record.reps ?? ""}" placeholder="例 10,10" /></label>
+        <div class="exercise-actions">
+          ${exercise.rest ? `<button class="rest-button" type="button">休憩タイマー ${exercise.rest}秒</button>` : ""}
+          <a class="video-link" href="${exercise.video.url}" target="_blank" rel="noopener noreferrer"
+            title="${exercise.video.title}" aria-label="${exercise.name}のおすすめ動画「${exercise.video.title}」をYouTubeで見る">
+            <span aria-hidden="true">▶</span> YouTubeで参考動画
+          </a>
+        </div>
       </div>`;
 
     const checkbox = card.querySelector('input[type="checkbox"]');
     const weightInput = card.querySelector('input[type="number"]');
     const repsInput = card.querySelector('input[type="text"]');
-    checkbox.addEventListener("change", () => {
-      card.classList.toggle("is-complete", checkbox.checked);
-      setRecord(exercise.id, { done: checkbox.checked });
-    });
+    checkbox.addEventListener("change", () => setRecord(exercise.id, { done: checkbox.checked }));
     weightInput.addEventListener("change", () => setRecord(exercise.id, { weight: weightInput.value }));
     repsInput.addEventListener("change", () => setRecord(exercise.id, { reps: repsInput.value }));
     card.querySelector(".rest-button")?.addEventListener("click", () => startTimer(exercise.rest));
