@@ -7,6 +7,36 @@ const weeks = {
   4: { label: "疲労を抜く", note: "全種目2セット、重量を約10%軽くしてRPE 5～6。有酸素も楽に。", sets: 2 },
 };
 
+const youtubeSearchTerms = {
+  "リニアレッグプレス": "リニアレッグプレス 正しい使い方 フォーム 初心者",
+  "チェストプレス": "チェストプレス 正しい使い方 フォーム 初心者",
+  "ラットプル": "ラットプルダウン 正しい使い方 フォーム 初心者",
+  "グルートドライブ": "グルートドライブ マシン 正しい使い方 フォーム",
+  "ショルダープレス": "ショルダープレス マシン 正しい使い方 初心者",
+  "ケーブル・パロフプレス": "パロフプレス ケーブル 正しいフォーム 初心者",
+  "トレッドミル速歩き": "トレッドミル ウォーキング 正しい姿勢 使い方 初心者",
+  "バードドッグ": "バードドッグ 正しいフォーム 腰 初心者",
+  "膝付きサイドプランク": "膝つき サイドプランク 正しいフォーム 初心者",
+  "フォームローラー／軽いストレッチ": "フォームローラー 全身 初心者 正しい使い方",
+  "スミス・ボックススクワット": "スミスマシン ボックススクワット 正しいフォーム 初心者",
+  "ケーブル・プルスルー": "ケーブル プルスルー 正しいフォーム 初心者",
+  "インクラインプレス": "インクライン チェストプレス マシン 正しいフォーム",
+  "アシストチンニング": "アシストチンニング マシン 正しい使い方 初心者",
+  "シーテッドロー": "シーテッドロー マシン 正しい使い方 フォーム 初心者",
+  "デッドバグ": "デッドバグ 正しいフォーム 腰 初心者",
+  "グルートブリッジ": "グルートブリッジ 正しいフォーム 初心者",
+  "フォームローラー／ストレッチ": "フォームローラー ストレッチ 全身 初心者",
+  "レッグプレス": "レッグプレス マシン 正しい使い方 フォーム 初心者",
+  "ダンベルベンチプレス": "ダンベルベンチプレス 正しいフォーム 初心者",
+  "リアデルトフライ": "リアデルトフライ マシン 正しい使い方 フォーム",
+  "サイドプランク": "サイドプランク 正しいフォーム 初心者",
+};
+
+function youtubeSearchUrl(exerciseName) {
+  const query = youtubeSearchTerms[exerciseName] || `${exerciseName} 正しいフォーム 初心者`;
+  return `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
+}
+
 const days = {
   mon: {
     code: "MONDAY / FULL BODY A",
@@ -89,7 +119,7 @@ const days = {
 };
 
 const normalizeExercise = ([id, name, type, reps, rpe, rest, machine, fixedSets]) =>
-  ({ id, name, type, reps, rpe, rest, machine, fixedSets });
+  ({ id, name, type, reps, rpe, rest, machine, fixedSets, videoUrl: youtubeSearchUrl(name) });
 Object.values(days).forEach((day) => { day.exercises = day.exercises.map(normalizeExercise); });
 
 const defaultState = { week: 1, day: "mon", workouts: {}, weekly: {} };
@@ -197,7 +227,12 @@ function renderDay() {
       <div class="exercise-inputs">
         <label>重量<input type="number" min="0" step="0.5" inputmode="decimal" value="${record.weight ?? ""}" placeholder="kg" /></label>
         <label>実績回数<input type="text" value="${record.reps ?? ""}" placeholder="例 10,10" /></label>
-        ${exercise.rest ? `<button class="rest-button" type="button">休憩タイマー ${exercise.rest}秒</button>` : ""}
+        <div class="exercise-actions">
+          ${exercise.rest ? `<button class="rest-button" type="button">休憩タイマー ${exercise.rest}秒</button>` : ""}
+          <a class="video-link" href="${exercise.videoUrl}" target="_blank" rel="noopener noreferrer" aria-label="${exercise.name}の参考動画をYouTubeで見る">
+            <span aria-hidden="true">▶</span> YouTubeで参考動画
+          </a>
+        </div>
       </div>`;
 
     const checkbox = card.querySelector('input[type="checkbox"]');
