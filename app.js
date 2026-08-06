@@ -7,6 +7,38 @@ const weeks = {
   4: { label: "疲労を抜く", note: "全種目2セット、重量を約10%軽くしてRPE 5～6。有酸素も楽に。", sets: 2 },
 };
 
+const weekdayLabels = { mon: "月", tue: "火", wed: "水", thu: "木", fri: "金" };
+const abRollerPlan = {
+  1: {
+    mon: { sets: 2, reps: 3, intensity: "RPE 5–6", rest: 75, mode: "筋力日" },
+    tue: { sets: 1, reps: 3, intensity: "RPE 3–4", rest: 60, mode: "フォーム日" },
+    wed: { sets: 2, reps: 3, intensity: "RPE 5–6", rest: 75, mode: "筋力日" },
+    thu: { sets: 1, reps: 3, intensity: "RPE 3–4", rest: 60, mode: "フォーム日" },
+    fri: { sets: 2, reps: 4, intensity: "RPE 5–6", rest: 75, mode: "筋力日" },
+  },
+  2: {
+    mon: { sets: 2, reps: 4, intensity: "RPE 5–6", rest: 75, mode: "筋力日" },
+    tue: { sets: 1, reps: 3, intensity: "RPE 3–4", rest: 60, mode: "フォーム日" },
+    wed: { sets: 2, reps: 4, intensity: "RPE 5–6", rest: 75, mode: "筋力日" },
+    thu: { sets: 1, reps: 3, intensity: "RPE 3–4", rest: 60, mode: "フォーム日" },
+    fri: { sets: 2, reps: 5, intensity: "RPE 6", rest: 75, mode: "筋力日" },
+  },
+  3: {
+    mon: { sets: 2, reps: 5, intensity: "RPE 6", rest: 90, mode: "筋力日" },
+    tue: { sets: 1, reps: 3, intensity: "RPE 3–4", rest: 60, mode: "フォーム日" },
+    wed: { sets: 2, reps: 5, intensity: "RPE 6", rest: 90, mode: "筋力日" },
+    thu: { sets: 1, reps: 3, intensity: "RPE 3–4", rest: 60, mode: "フォーム日" },
+    fri: { sets: 3, reps: 5, intensity: "RPE 6–7", rest: 90, mode: "筋力日" },
+  },
+  4: {
+    mon: { sets: 1, reps: 3, intensity: "RPE 3–4", rest: 60, mode: "回復日" },
+    tue: { sets: 1, reps: 3, intensity: "RPE 3–4", rest: 60, mode: "回復日" },
+    wed: { sets: 1, reps: 3, intensity: "RPE 3–4", rest: 60, mode: "回復日" },
+    thu: { sets: 1, reps: 3, intensity: "RPE 3–4", rest: 60, mode: "回復日" },
+    fri: { sets: 1, reps: 3, intensity: "RPE 3–4", rest: 60, mode: "回復日" },
+  },
+};
+
 const exerciseVideos = {
   "リニアレッグプレス": {
     title: "PLATE-LOADED リニアレッグプレス（トレーニング動画）",
@@ -183,7 +215,7 @@ const normalizeExercise = ([id, name, type, reps, rpe, rest, machine, fixedSets]
   ({ id, name, type, reps, rpe, rest, machine, fixedSets, video: exerciseVideos[name] });
 Object.values(days).forEach((day) => { day.exercises = day.exercises.map(normalizeExercise); });
 
-const defaultState = { week: 1, day: "mon", workouts: {}, weekly: {} };
+const defaultState = { week: 1, day: "mon", workouts: {}, abRoller: {}, weekly: {} };
 let state = loadState();
 let timerId = null;
 let remainingSeconds = 0;
@@ -197,6 +229,15 @@ const elements = {
   sessionFocus: document.querySelector("#sessionFocus"),
   warmupBox: document.querySelector("#warmupBox"),
   exerciseList: document.querySelector("#exerciseList"),
+  abRollerMode: document.querySelector("#abRollerMode"),
+  abRollerWeekPlan: document.querySelector("#abRollerWeekPlan"),
+  abRollerPrescription: document.querySelector("#abRollerPrescription"),
+  abRollerIntensity: document.querySelector("#abRollerIntensity"),
+  abRollerRest: document.querySelector("#abRollerRest"),
+  abRollerGuidance: document.querySelector("#abRollerGuidance"),
+  abRollerDone: document.querySelector("#abRollerDone"),
+  abRollerActualReps: document.querySelector("#abRollerActualReps"),
+  abRollerTimer: document.querySelector("#abRollerTimer"),
   completionText: document.querySelector("#completionText"),
   completionBar: document.querySelector("#completionBar"),
   bodyWeight: document.querySelector("#bodyWeight"),
@@ -233,6 +274,20 @@ function setRecord(exerciseId, patch) {
   state.workouts[key] = { ...state.workouts[key], ...patch };
   saveState();
   updateCompletion();
+}
+
+function abRollerKey() {
+  return `${state.week}:${state.day}`;
+}
+
+function getAbRollerRecord() {
+  return state.abRoller[abRollerKey()] || {};
+}
+
+function setAbRollerRecord(patch) {
+  const key = abRollerKey();
+  state.abRoller[key] = { ...state.abRoller[key], ...patch };
+  saveState();
 }
 
 function effectiveSets(exercise) {
@@ -306,7 +361,30 @@ function renderDay() {
     card.querySelector(".rest-button")?.addEventListener("click", () => startTimer(exercise.rest));
     elements.exerciseList.append(card);
   });
+  renderAbRoller();
   updateCompletion();
+}
+
+function renderAbRoller() {
+  const current = abRollerPlan[state.week][state.day];
+  const record = getAbRollerRecord();
+  elements.abRollerMode.textContent = current.mode;
+  elements.abRollerPrescription.textContent = `${current.sets} × ${current.reps}回`;
+  elements.abRollerIntensity.textContent = current.intensity;
+  elements.abRollerRest.textContent = `${current.rest}秒`;
+  elements.abRollerTimer.textContent = `休憩タイマー ${current.rest}秒`;
+  elements.abRollerDone.checked = Boolean(record.done);
+  elements.abRollerActualReps.value = record.reps ?? "";
+  elements.abRollerGuidance.textContent = current.mode === "筋力日"
+    ? "各セット3回以上の余力を残します。3秒ほどかけて転がし、腰が反らない範囲だけ戻してください。"
+    : "疲労を増やさない練習日です。可動域は短く、腹圧と腰の位置だけを確認して終了します。";
+  elements.abRollerWeekPlan.innerHTML = Object.entries(abRollerPlan[state.week]).map(([day, plan]) => `
+    <div class="${day === state.day ? "is-current" : ""}">
+      <span>${weekdayLabels[day]}</span>
+      <strong>${plan.sets} × ${plan.reps}回</strong>
+      <small>${plan.mode}</small>
+    </div>
+  `).join("");
 }
 
 function updateCompletion() {
@@ -374,7 +452,7 @@ function exportData() {
 
 function resetData() {
   if (!window.confirm("この端末に保存したトレーニング記録をすべて削除します。よろしいですか？")) return;
-  state = { ...defaultState, workouts: {}, weekly: {} };
+  state = { ...defaultState, workouts: {}, abRoller: {}, weekly: {} };
   saveState();
   render();
 }
@@ -415,6 +493,9 @@ elements.painLevel.addEventListener("input", () => {
   updateWeekly({ painLevel: elements.painLevel.value });
 });
 elements.weeklyNote.addEventListener("change", () => updateWeekly({ note: elements.weeklyNote.value }));
+elements.abRollerDone.addEventListener("change", () => setAbRollerRecord({ done: elements.abRollerDone.checked }));
+elements.abRollerActualReps.addEventListener("change", () => setAbRollerRecord({ reps: elements.abRollerActualReps.value }));
+elements.abRollerTimer.addEventListener("click", () => startTimer(abRollerPlan[state.week][state.day].rest));
 document.querySelector("#cancelTimer").addEventListener("click", cancelTimer);
 document.querySelector("#exportButton").addEventListener("click", exportData);
 document.querySelector("#resetButton").addEventListener("click", resetData);

@@ -130,6 +130,48 @@
           </div>
           <div class="warmup" id="warmupBox"></div>
           <div class="exercise-list" id="exerciseList"></div>
+          <section class="ab-roller-addon" aria-labelledby="abRollerHeading">
+            <div class="ab-roller-addon__header">
+              <div>
+                <p class="eyebrow">DAILY CORE ADD-ON</p>
+                <h4 id="abRollerHeading">別枠：アブローラー（膝コロ）</h4>
+              </div>
+              <span class="ab-roller-mode" id="abRollerMode">筋力日</span>
+            </div>
+            <div class="ab-roller-week" id="abRollerWeekPlan" aria-label="今週のアブローラー計画"></div>
+            <div class="ab-roller-prescription">
+              <div><span>今日のセット × 回数</span><strong id="abRollerPrescription">2 × 3回</strong></div>
+              <div><span>強度</span><strong id="abRollerIntensity">RPE 5–6</strong></div>
+              <div><span>休憩</span><strong id="abRollerRest">75秒</strong></div>
+              <div><span>動作</span><strong>膝コロ・部分可動域</strong></div>
+            </div>
+            <p class="ab-roller-guidance" id="abRollerGuidance"></p>
+            <div class="ab-roller-log">
+              <label class="ab-roller-done">
+                <input type="checkbox" id="abRollerDone" />
+                <span>今日の分を完了</span>
+              </label>
+              <label>
+                実績回数
+                <input type="text" id="abRollerActualReps" placeholder="例 3,3" />
+              </label>
+              <button class="rest-button" id="abRollerTimer" type="button">休憩タイマー</button>
+              <a class="video-link" href="https://www.youtube.com/watch?v=9w7pbESQWD8" target="_blank"
+                rel="noopener noreferrer" aria-label="アブローラー膝コロのおすすめ動画をYouTubeで見る">
+                <span aria-hidden="true">▶</span> YouTubeで膝コロ動画
+              </a>
+            </div>
+            <p class="ab-roller-warning">
+              お腹を軽く丸め、腰が反る直前で戻ります。反動と立ちコロは禁止。腰痛が増す、脚のしびれ・放散痛が出る場合は中止してください。
+              土日はアブローラーも休みです。
+            </p>
+            <p class="ab-roller-sources">
+              設定根拠：
+              <a href="https://www.acsm.org/wp-content/uploads/2026/03/Resistance-Training-Position-Stand-infographic.pdf" target="_blank" rel="noopener noreferrer">ACSM 2026</a>
+              ／ <a href="https://www.scielo.br/j/medical/a/BK4tJ3s4p95tKh86MKPTy4P/?format=html" target="_blank" rel="noopener noreferrer">Ab Wheel筋活動研究</a>
+              ／ <a href="https://www.who.int/publications/i/item/9789240081789" target="_blank" rel="noopener noreferrer">WHO腰痛ガイドライン</a>
+            </p>
+          </section>
           <div class="completion-panel">
             <div>
               <strong id="completionText">0 / 0 完了</strong>
