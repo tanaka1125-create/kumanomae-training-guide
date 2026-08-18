@@ -1,10 +1,19 @@
 const STORAGE_KEY = "kumanomae-training-v1";
+const START_WEIGHT = 85.5;
+const TARGET_WEIGHT = 80.5;
+
+const activityTargets = {
+  1: { steps: 7000, cardio: 175, finisher: 15, main: 35, weekend: "土30分＋日30分" },
+  2: { steps: 7500, cardio: 200, finisher: 20, main: 40, weekend: "土30分＋日30分" },
+  3: { steps: 8000, cardio: 225, finisher: 20, main: 45, weekend: "土40分＋日35分" },
+  4: { steps: 8000, cardio: 200, finisher: 15, main: 40, weekend: "土40分＋日35分" },
+};
 
 const weeks = {
-  1: { label: "フォーム習得", note: "全種目2セット・8回中心・RPE 6。重量よりフォームと腰の反応を確認。", sets: 2 },
-  2: { label: "回数を増やす", note: "同じ重量で9～10回へ。RPE 6～7。まだ急いで重量を増やさない。", sets: 2 },
-  3: { label: "少しだけ強く", note: "主要5動作は3セット・RPE 7。条件を満たした種目だけ最小単位で増量。", sets: 3 },
-  4: { label: "疲労を抜く", note: "全種目2セット、重量を約10%軽くしてRPE 5～6。有酸素も楽に。", sets: 2 },
+  1: { label: "土台づくり", note: "全種目2セット・RPE 6。7,000歩／日と中強度175分／週から開始。", sets: 2 },
+  2: { label: "活動量を増やす", note: "筋トレは同じ重量で9～10回へ。有酸素200分／週、7,500歩／日。", sets: 2 },
+  3: { label: "ピーク週", note: "主要5動作は3セット・RPE 7。有酸素225分／週、8,000歩／日。", sets: 3 },
+  4: { label: "疲労を抜く", note: "筋トレ重量を約10%軽くし、有酸素200分／週を楽な強度で。", sets: 2 },
 };
 
 const weekdayLabels = { mon: "月", tue: "火", wed: "水", thu: "木", fri: "金" };
@@ -135,7 +144,7 @@ const days = {
     code: "MONDAY / FULL BODY A",
     title: "全身A：マシン中心",
     description: "掲載設備だけで完結する、最も再現しやすい基本日です。",
-    time: "45–60 MIN",
+    time: "60–75 MIN",
     focus: "FULL BODY",
     warmup: "準備：トレッドミル5分 → 自重スクワット10回 → バードドッグ左右5回 → 軽い準備セット",
     exercises: [
@@ -145,17 +154,18 @@ const days = {
       ["glute-drive", "グルートドライブ", "股関節伸展", "10", "6", 90, "グルートドライブ"],
       ["shoulder-press", "ショルダープレス", "垂直プレス", "8–10", "6", 90, "ショルダープレス"],
       ["pallof-press", "ケーブル・パロフプレス", "体幹", "左右10", "軽め", 60, "ケーブル"],
+      ["treadmill-mon", "トレッドミル速歩き", "有酸素", "週別", "4–5", 0, "トレッドミル", 1, "finisher"],
     ],
   },
   tue: {
     code: "TUESDAY / CARDIO + CORE A",
     title: "有酸素＋体幹A",
     description: "最初の1か月は走るより速歩き。腰の反応を確かめながら活動量を確保します。",
-    time: "35–45 MIN",
+    time: "45–60 MIN",
     focus: "CARDIO",
     warmup: "トレッドミルは傾斜1～3%。呼吸は増えるが会話できる速さに調整。",
     exercises: [
-      ["treadmill-a", "トレッドミル速歩き", "有酸素", "25–30分", "4–5", 0, "トレッドミル", 1],
+      ["treadmill-a", "トレッドミル速歩き", "有酸素", "週別", "4–5", 0, "トレッドミル", 1, "main"],
       ["bird-dog", "バードドッグ", "体幹", "左右6", "丁寧に", 45, "ヨガマット"],
       ["side-plank-knee", "膝付きサイドプランク", "体幹", "左右15–20秒", "余裕あり", 45, "ヨガマット"],
       ["recovery-a", "フォームローラー／軽いストレッチ", "回復", "5分", "痛みなし", 0, "フォームローラー", 1],
@@ -165,7 +175,7 @@ const days = {
     code: "WEDNESDAY / FULL BODY B",
     title: "全身B：基本動作の習得",
     description: "ケーブルと補助付きマシンを使い、ヒップヒンジと懸垂動作を安全に練習します。",
-    time: "45–60 MIN",
+    time: "60–80 MIN",
     focus: "TECHNIQUE",
     warmup: "準備：トレッドミル5分 → ボックスへの自重スクワット → 棒を使ったヒップヒンジ練習8回",
     exercises: [
@@ -176,17 +186,18 @@ const days = {
       ["shoulder-press-b", "ショルダープレス", "垂直プレス", "8", "6", 90, "ショルダープレス"],
       ["seated-row", "シーテッドロー", "背中補助", "10", "6", 90, "シーテッドロー"],
       ["dead-bug", "デッドバグ", "体幹", "左右8", "丁寧に", 45, "ヨガマット"],
+      ["treadmill-wed", "トレッドミル速歩き", "有酸素", "週別", "4–5", 0, "トレッドミル", 1, "finisher"],
     ],
   },
   thu: {
     code: "THURSDAY / CARDIO + RECOVERY",
     title: "有酸素＋回復",
     description: "水曜日の疲労を残さず、無理のない範囲で活動量を確保します。",
-    time: "35–45 MIN",
+    time: "45–60 MIN",
     focus: "RECOVERY",
     warmup: "痛みが出ない範囲でゆっくり開始。疲労が強い日は時間を短縮して構いません。",
     exercises: [
-      ["treadmill-b", "トレッドミル速歩き", "有酸素", "25–30分", "4–5", 0, "トレッドミル", 1],
+      ["treadmill-b", "トレッドミル速歩き", "有酸素", "週別", "4–5", 0, "トレッドミル", 1, "main"],
       ["glute-bridge", "グルートブリッジ", "臀部", "10", "軽め", 60, "ヨガマット"],
       ["dead-bug-b", "デッドバグ", "体幹", "左右8", "丁寧に", 45, "ヨガマット"],
       ["recovery-b", "フォームローラー／ストレッチ", "回復", "5分", "痛みなし", 0, "フォームローラー", 1],
@@ -196,7 +207,7 @@ const days = {
     code: "FRIDAY / FULL BODY C",
     title: "全身C：週の仕上げ",
     description: "週前半で覚えた動作を反復。重量より同じフォームを再現することを優先します。",
-    time: "45–60 MIN",
+    time: "60–80 MIN",
     focus: "REPEAT",
     warmup: "準備：トレッドミル5分 → 自重スクワット10回 → ヒップヒンジ練習8回 → 軽い準備セット",
     exercises: [
@@ -207,12 +218,13 @@ const days = {
       ["shoulder-press-c", "ショルダープレス", "垂直プレス", "8–10", "6–7", 90, "ショルダープレス"],
       ["rear-delt", "リアデルトフライ", "肩後部補助", "10–12", "6", 60, "リアデルトフライ"],
       ["side-plank", "サイドプランク", "体幹", "左右15–25秒", "余裕あり", 45, "ヨガマット"],
+      ["treadmill-fri", "トレッドミル速歩き", "有酸素", "週別", "4–5", 0, "トレッドミル", 1, "finisher"],
     ],
   },
 };
 
-const normalizeExercise = ([id, name, type, reps, rpe, rest, machine, fixedSets]) =>
-  ({ id, name, type, reps, rpe, rest, machine, fixedSets, video: exerciseVideos[name] });
+const normalizeExercise = ([id, name, type, reps, rpe, rest, machine, fixedSets, cardioSlot]) =>
+  ({ id, name, type, reps, rpe, rest, machine, fixedSets, cardioSlot, video: exerciseVideos[name] });
 Object.values(days).forEach((day) => { day.exercises = day.exercises.map(normalizeExercise); });
 
 const defaultState = { week: 1, day: "mon", workouts: {}, abRoller: {}, weekly: {} };
@@ -243,7 +255,15 @@ const elements = {
   bodyWeight: document.querySelector("#bodyWeight"),
   painLevel: document.querySelector("#painLevel"),
   painOutput: document.querySelector("#painOutput"),
+  averageSteps: document.querySelector("#averageSteps"),
+  cardioMinutes: document.querySelector("#cardioMinutes"),
+  nutritionDays: document.querySelector("#nutritionDays"),
   weeklyNote: document.querySelector("#weeklyNote"),
+  currentWeight: document.querySelector("#currentWeight"),
+  weightChange: document.querySelector("#weightChange"),
+  weightRemaining: document.querySelector("#weightRemaining"),
+  weightStatus: document.querySelector("#weightStatus"),
+  goalProgressBar: document.querySelector("#goalProgressBar"),
   restTimer: document.querySelector("#restTimer"),
   timerDisplay: document.querySelector("#timerDisplay"),
 };
@@ -296,6 +316,11 @@ function effectiveSets(exercise) {
   return state.week === 3 && assistance.includes(exercise.type) ? 2 : weeks[state.week].sets;
 }
 
+function displayReps(exercise) {
+  if (!exercise.cardioSlot) return exercise.reps;
+  return `${activityTargets[state.week][exercise.cardioSlot]}分`;
+}
+
 function render() {
   renderWeek();
   renderDay();
@@ -306,7 +331,8 @@ function renderWeek() {
   document.querySelectorAll("[data-week]").forEach((button) => {
     button.setAttribute("aria-pressed", String(Number(button.dataset.week) === state.week));
   });
-  elements.weekNote.textContent = `Week ${state.week}｜${weeks[state.week].label}：${weeks[state.week].note}`;
+  const target = activityTargets[state.week];
+  elements.weekNote.textContent = `Week ${state.week}｜${weeks[state.week].label}：${weeks[state.week].note} 週末ウォークは${target.weekend}。`;
 }
 
 function renderDay() {
@@ -337,7 +363,7 @@ function renderDay() {
         <span>${String(index + 1).padStart(2, "0")} / ${exercise.machine}</span>
         <strong>${exercise.name}</strong>
       </div>
-      <div class="exercise-stat"><span>SETS × REPS</span><strong>${effectiveSets(exercise)} × ${exercise.reps}</strong></div>
+      <div class="exercise-stat"><span>SETS × REPS</span><strong>${effectiveSets(exercise)} × ${displayReps(exercise)}</strong></div>
       <div class="exercise-stat"><span>INTENSITY</span><strong>RPE ${exercise.rpe}</strong></div>
       <div class="exercise-stat"><span>REST</span><strong>${exercise.rest ? `${exercise.rest}秒` : "—"}</strong></div>
       <div class="exercise-inputs">
@@ -403,13 +429,47 @@ function renderWeeklyLog() {
   elements.bodyWeight.value = weekly.bodyWeight ?? "";
   elements.painLevel.value = weekly.painLevel ?? 0;
   elements.painOutput.value = weekly.painLevel ?? 0;
+  elements.averageSteps.value = weekly.averageSteps ?? "";
+  elements.cardioMinutes.value = weekly.cardioMinutes ?? "";
+  elements.nutritionDays.value = weekly.nutritionDays ?? "";
   elements.weeklyNote.value = weekly.note ?? "";
+  renderGoalProgress(weekly);
+}
+
+function renderGoalProgress(weekly) {
+  const hasWeight = weekly.bodyWeight !== undefined && weekly.bodyWeight !== "";
+  const current = hasWeight ? Number(weekly.bodyWeight) : START_WEIGHT;
+  const change = current - START_WEIGHT;
+  const remaining = Math.max(current - TARGET_WEIGHT, 0);
+  const progress = Math.min(Math.max(((START_WEIGHT - current) / (START_WEIGHT - TARGET_WEIGHT)) * 100, 0), 100);
+  elements.currentWeight.textContent = `${current.toFixed(1)} kg`;
+  elements.weightChange.textContent = `${change > 0 ? "+" : ""}${change.toFixed(1)} kg`;
+  elements.weightRemaining.textContent = `${remaining.toFixed(1)} kg`;
+  elements.goalProgressBar.style.width = `${progress}%`;
+
+  if (!hasWeight) {
+    elements.weightStatus.textContent = "週平均体重を入力すると進捗を表示します。";
+    return;
+  }
+  const previousWeekly = state.week > 1 ? state.weekly[`week-${state.week - 1}`] : null;
+  const previous = previousWeekly?.bodyWeight ? Number(previousWeekly.bodyWeight) : START_WEIGHT;
+  const weeklyLoss = previous - current;
+  if (weeklyLoss > 1) {
+    elements.weightStatus.textContent = `今週 −${weeklyLoss.toFixed(1)}kg：減少が速めです。食事を極端に減らさず、体調不良があれば中止して相談してください。`;
+  } else if (weeklyLoss >= 0.5) {
+    elements.weightStatus.textContent = `今週 −${weeklyLoss.toFixed(1)}kg：安全運用の目安内です。今の習慣を維持します。`;
+  } else if (weeklyLoss > 0) {
+    elements.weightStatus.textContent = `今週 −${weeklyLoss.toFixed(1)}kg：小さな減少も成功です。2週間平均で判断します。`;
+  } else {
+    elements.weightStatus.textContent = "短期の増減は水分でも動きます。食事記録と活動量を確認し、急な追加運動はしません。";
+  }
 }
 
 function updateWeekly(patch) {
   const key = weeklyKey();
   state.weekly[key] = { ...state.weekly[key], ...patch };
   saveState();
+  renderGoalProgress(state.weekly[key]);
 }
 
 function startTimer(seconds) {
@@ -488,6 +548,9 @@ document.querySelectorAll("[data-day]").forEach((button) => {
 });
 
 elements.bodyWeight.addEventListener("change", () => updateWeekly({ bodyWeight: elements.bodyWeight.value }));
+elements.averageSteps.addEventListener("change", () => updateWeekly({ averageSteps: elements.averageSteps.value }));
+elements.cardioMinutes.addEventListener("change", () => updateWeekly({ cardioMinutes: elements.cardioMinutes.value }));
+elements.nutritionDays.addEventListener("change", () => updateWeekly({ nutritionDays: elements.nutritionDays.value }));
 elements.painLevel.addEventListener("input", () => {
   elements.painOutput.value = elements.painLevel.value;
   updateWeekly({ painLevel: elements.painLevel.value });
